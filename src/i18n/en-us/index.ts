@@ -43,7 +43,7 @@ export default {
     active: 'Published',
     delete: 'Do you really want to delete this entity?',
     title: 'Title',
-    summary: 'Summary',
+    description: 'Description',
     slug: 'Friendly url',
     footer: 'Footer',
     publishedAt: 'Publish at',
