@@ -151,7 +151,7 @@ export default {
         this.loading = false
         if (contentResult.success) {
           this.entity = contentResult.data
-          const ancestorsResult = await this.$api.get(`/entities/?ancestor-of=${this.entity.id}&descendant-of=root&select=id,contents.title&order-by=ancestor_relation_depth:desc`)
+          const ancestorsResult = await this.$api.get(`/entities/?ancestor-of=${this.entity.id}&descendant-of=website&select=id,contents.title&order-by=ancestor_relation_depth:desc`)
           if (ancestorsResult.success) {
             this.ancestors = ancestorsResult.data.data
           } else {
