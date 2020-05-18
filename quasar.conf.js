@@ -119,7 +119,7 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       publicPath: 'cms',
-      distDir: '../server/public/cms',
+      distDir: '../kusikusi/public/cms',
       env: {
         VERSION: `"V${package.version}"`,
         API_URL: JSON.stringify(process.env.API_URL ? process.env.API_URL : ctx.dev ? 'http://127.0.0.1:8000/api' : '/api'),
