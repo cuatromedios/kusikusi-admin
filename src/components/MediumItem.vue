@@ -5,7 +5,7 @@
     <q-img :src="`${$store.getters.media_url}${medium.thumb}`"
            :ratio="1" contain
            v-if="medium.properties && medium.properties.isWebImage"
-           class="bg-grey-2" />
+           class="checkered-bg" />
     <q-responsive :ratio="1" v-if="!medium.properties || !medium.properties.isWebImage" >
       <div class="rounded-borders bg-grey-2 text-white flex flex-center">
         <q-icon size="80px"
@@ -121,3 +121,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  $checkcolor: #eeeeee;
+  .checkered-bg {
+    background-image: linear-gradient(45deg, $checkcolor 25%, transparent 25%), linear-gradient(-45deg, $checkcolor 25%, transparent 25%), linear-gradient(45deg, transparent 75%, $checkcolor 75%), linear-gradient(-45deg, transparent 75%, $checkcolor 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+</style>

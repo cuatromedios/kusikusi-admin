@@ -55,7 +55,7 @@ export default {
       if (loginResult.success) {
         this.$store.commit('setAuthtoken', loginResult.data.token)
         this.$store.commit('setUser', loginResult.data.user)
-        this.$router.push({ name: 'content' })
+        this.$router.push({ name: 'content', params: { entity_id: 'home' } })
       } else {
         if (loginResult.status === 401) {
           this.$q.notify({

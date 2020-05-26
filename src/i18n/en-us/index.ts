@@ -36,6 +36,7 @@ export default {
   },
   contents: {
     home: 'Home',
+    website: 'Website',
     icon: 'ballot',
     view: 'Vista',
     contents: 'Contents',
