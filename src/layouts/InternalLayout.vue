@@ -30,7 +30,7 @@
       </q-list>
     </q-drawer>
     <q-page-container>
-        <router-view :editBus="editBus" :saveBus="saveBus"/>
+        <router-view />
     </q-page-container>
   </q-layout>
 </template>
@@ -42,9 +42,7 @@ export default {
   data () {
     return {
       left: false,
-      miniState: true,
-      editBus: new Vue(),
-      saveBus: new Vue()
+      miniState: true
     }
   }
 }
