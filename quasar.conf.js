@@ -57,6 +57,7 @@ module.exports = configure(function (ctx) {
 
       components: [
         'QAvatar',
+        'QBanner',
         'QBtn',
         'QBreadcrumbs',
         'QBreadcrumbsEl',

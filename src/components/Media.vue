@@ -20,6 +20,7 @@
                v-if="allowed && allowed.length > 0"
                @click="addMediaDialog = true"/>
       </div>
+      <q-banner class="bg-grey-2 text-center q-mb-md" v-if="!media || (media && media.length === 0)">{{ $t('general.noItems')}}</q-banner>
       <draggable v-model="media" v-bind="getDragOptions()" :disabled="!reorderMode" class="row draggable-container q-col-gutter-md">
         <div v-for="medium in media"
              :key="medium.id"

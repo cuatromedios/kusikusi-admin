@@ -26,6 +26,7 @@
                v-if="models && models.length === 1"
                @click="add(models[0])"/>
       </div>
+      <q-banner class="bg-grey-2 text-center" v-if="!children || (children && children.length === 0)">{{ $t('general.noItems')}}</q-banner>
       <q-list bordered>
         <draggable v-model="children" v-bind="getDragOptions()" :disabled="!reorderMode">
           <child-item v-for="child in children"

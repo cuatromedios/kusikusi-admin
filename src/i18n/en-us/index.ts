@@ -21,7 +21,8 @@ export default {
     sure: 'Are you sure?',
     delete: 'Delete',
     add: 'Add',
-    saveError: 'There was an error trying to send information'
+    saveError: 'There was an error trying to send information',
+    noItems: 'No items yet'
   },
   login: {
     title: 'Login',
