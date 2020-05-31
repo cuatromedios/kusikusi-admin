@@ -227,7 +227,7 @@ export default {
         this.$q.notify({
           position: 'top',
           color: 'positive',
-          message: this.$t('content.saveOk')
+          message: this.$t('contents.saveOk')
         })
         this.editing = false
       } else {

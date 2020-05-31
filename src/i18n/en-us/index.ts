@@ -52,7 +52,8 @@ export default {
     unpublishedAt: 'Stop publishing at',
     children: 'Children',
     media: 'Media',
-    reorder: 'Reorder'
+    reorder: 'Reorder',
+    saveOk: 'Saved'
   },
   media: {
     title: 'Media',
