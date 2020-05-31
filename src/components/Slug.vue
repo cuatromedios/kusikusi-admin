@@ -42,34 +42,11 @@ export default {
     }
   },
   mounted () {
-    if (this.entity.id === 'new') {
-      this.auto = true
-    }
-    const parts = this.fromField.split('.')
-    if (parts.length === 1) {
-      this.referenceField = {
-        type: 'entity',
-        object: this.entity,
-        prop: parts[0]
-      }
-    } else if (parts[0] === 'contents') {
-      for (const f in this.entity.contents) {
-        if (this.entity.contents[f].field === parts[1] && this.entity.contents[f].lang === this.lang) {
-          this.referenceField = {
-            type: 'content',
-            object: this.entity.contents[f],
-            prop: 'text'
-          }
-        }
-      }
-    } else if (parts[0] === 'properties') {
-      this.referenceField = this.entity.properties
-      this.referenceField = {
-        type: 'properties',
-        object: this.entity.properties,
-        prop: parts[1]
-      }
-    }
+    this.refresh()
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refresh()
+    next()
   },
   computed: {
     valueReference () {
@@ -86,6 +63,36 @@ export default {
     }
   },
   methods: {
+    refresh () {
+      if (this.entity.id === 'new') {
+        this.auto = true
+      }
+      const parts = this.fromField.split('.')
+      if (parts.length === 1) {
+        this.referenceField = {
+          type: 'entity',
+          object: this.entity,
+          prop: parts[0]
+        }
+      } else if (parts[0] === 'contents') {
+        for (const f in this.entity.contents) {
+          if (this.entity.contents[f].field === parts[1] && this.entity.contents[f].lang === this.lang) {
+            this.referenceField = {
+              type: 'content',
+              object: this.entity.contents[f],
+              prop: 'text'
+            }
+          }
+        }
+      } else if (parts[0] === 'properties') {
+        this.referenceField = this.entity.properties
+        this.referenceField = {
+          type: 'properties',
+          object: this.entity.properties,
+          prop: parts[1]
+        }
+      }
+    },
     calculateSlug () {
       this.$emit('input', slugify(this.referencedValue, { lower: true, strict: true }))
     },

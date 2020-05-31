@@ -1,95 +1,113 @@
 <template>
-  <nq-page :title="getEntityTitle" max-width="lg">
-    <template slot="before" v-if="ancestors.length > 0">
-      <q-breadcrumbs>
-        <q-breadcrumbs-el v-for="ancestor in ancestors"
-                          :key="ancestor.id"
-                          :label="ancestor.title"
-                          :to="{ name: 'content', params: { entity_id: ancestor.id } }"
+  <q-form @submit="save">
+    <nq-page :title="getEntityTitle" max-width="lg">
+      <template slot="before" v-if="ancestors.length > 0">
+        <q-breadcrumbs>
+          <q-breadcrumbs-el v-for="ancestor in ancestors"
+                            :key="ancestor.id"
+                            :label="ancestor.title"
+                            :to="{ name: 'content', params: { entity_id: ancestor.id } }"
+          />
+          <q-breadcrumbs-el />
+        </q-breadcrumbs>
+      </template>
+      <div id="langSelector" v-if="$store.state.ui.config && $store.state.ui.config.langs.length > 1" class="rounded-borders shadow-1">
+        <q-radio v-model="contentLang"
+                 size="sm"
+                 v-for="lang in $store.state.ui.config.langs"
+                 :key="lang"
+                 :val="lang"
+                 :label="$t(lang)"
         />
-        <q-breadcrumbs-el />
-      </q-breadcrumbs>
-    </template>
-    <div id="langSelector" v-if="$store.state.ui.config && $store.state.ui.config.langs.length > 1" class="rounded-borders shadow-1">
-      <q-radio v-model="contentLang"
-               size="sm"
-               v-for="lang in $store.state.ui.config.langs"
-               :key="lang"
-               :val="lang"
-               :label="$t(lang)"
-      />
-      <q-radio v-model="contentLang"
-               val="all"
-               :label="$t('all')"/>
-    </div>
-    <template slot="aside">
-      <h2>{{ $t('contents.publication') }}</h2>
-      <q-card>
-        <q-card-section  v-if="!loading">
-          <div class="row q-col-gutter-sm">
-            <nq-field dense class="col-12" :readonly="!editing">
-              <q-checkbox v-model="entity.is_active" :label="$t('contents.active')" :disable="!editing" left-label color="dark" />
-            </nq-field>
-            <nq-select dense v-model="entity.view" :label="$t('contents.view')" class="col-12" :readonly="!editing" :options="views"/>
-            <nq-date-time dense v-model="entity.published_at" display-format="dddd DD MMMM YYYY, h:mm a" :label="$t('contents.publishedAt')" class="col-12" :readonly="!editing" v-if="editing"></nq-date-time>
-            <nq-field :label="$t('contents.publishedAt')" class="col-12" readonly stack-label v-if="!editing">
-              <p>{{ entity.published_at | moment('dddd DD MMMM YYYY, h:mm a') }}
-                <small>(UTC&nbsp;{{ entity.published_at | moment('Z') }})</small></p>
-            </nq-field>
-            <nq-field label="ID" class="col-12" readonly stack-label>
-              <p>{{ entity.id }}</p>
-            </nq-field>
-          </div>
-        </q-card-section>
-        <q-card-section v-if="loading">
-          <q-skeleton type="QSlider" class="q-mb-md" />
-          <q-skeleton type="QSlider" class="q-mb-md" />
-          <q-skeleton type="QSlider" class="q-mb-md" />
-          <q-skeleton type="QSlider" class="q-mb-md" />
-        </q-card-section>
-      </q-card>
-    </template>
-    <div v-for="(fieldset, fieldsetIndex) in fieldsets" :key="fieldsetIndex">
-      <h2>{{ $t(fieldset.label) }}</h2>
-      <q-card>
-        <q-card-section>
-          <div class="row q-col-gutter-md">
-            <div v-for="(component, componentIndex) in fieldset.components"
-                 :key="componentIndex"
-                 :is="component.component"
-                 :label="`${$t(component.label)} ${component.isMultiLang ? '('+component.props.lang+')' : ''}`"
-                 :readonly="!editing"
-                 :data-multilingual="component.isMultiLang"
-                 :data-lang="component.props ? component.props.lang : ''"
-                 :lang="component.props ? component.props.lang : null"
-                 :entity="entity"
-                 v-show="!component.isMultiLang || (component.isMultiLang && (component.props.lang === contentLang || contentLang === 'all'))"
-                 :value="getValue(component)"
-                 @input="setValue(component, $event)"
-                 v-bind="component.props"
-                 class="col-12" />
-          </div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <div class="fixed-top-right text-white action-buttons">
-      <q-btn v-if="!editing && !loading"
-             push size="lg" icon="edit" class="bg-accent no-border-radius"
-             :label="$t('general.edit')"
-             :disable="saving"
-             @click="editing = true" />
-      <q-btn v-if="editing"
-             flat size="md" class="no-border-radius q-mr-sm"
-             :label="$t('general.cancel')"
-             @click="cancel" />
-      <q-btn v-if="editing"
-             push size="lg" icon="cloud_upload" class="bg-positive no-border-radius"
-             :disable="loading || saving"
-             :loading="saving"
-             @click="save"
-             :label="$t('general.save')" />
-    </div>
-  </nq-page>
+        <q-radio v-model="contentLang"
+                 val="all"
+                 :label="$t('all')"/>
+      </div>
+      <template slot="aside">
+        <h2>{{ $t('contents.publication') }}</h2>
+        <q-card>
+          <q-card-section v-if="!loading">
+            <div class="row q-col-gutter-sm">
+              <nq-field dense class="col-12" :readonly="!editing">
+                <q-checkbox v-model="entity.is_active" :label="$t('contents.active')" :disable="!editing" left-label color="dark" />
+              </nq-field>
+              <nq-select dense v-model="entity.view" :label="$t('contents.view')" class="col-12" :readonly="!editing" :options="views"/>
+              <nq-date-time dense v-model="entity.published_at" display-format="dddd DD MMMM YYYY, h:mm a" :label="$t('contents.publishedAt')" class="col-12" :readonly="!editing" v-if="editing"></nq-date-time>
+              <nq-field :label="$t('contents.publishedAt')" class="col-12" readonly stack-label v-if="!editing">
+                <p>{{ entity.published_at | moment('dddd DD MMMM YYYY, h:mm a') }}
+                  <small>(UTC&nbsp;{{ entity.published_at | moment('Z') }})</small></p>
+              </nq-field>
+              <nq-field label="ID" class="col-12" readonly stack-label>
+                <p>{{ entity.id }}</p>
+              </nq-field>
+            </div>
+          </q-card-section>
+          <q-card-section v-if="loading">
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+          </q-card-section>
+        </q-card>
+      </template>
+      <template v-if="loading">
+        <h2>&nbsp;</h2>
+        <q-card>
+          <q-card-section v-if="loading">
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+            <q-skeleton type="QSlider" class="q-mb-md" />
+          </q-card-section>
+        </q-card>
+      </template>
+      <template v-if="!loading">
+        <div v-for="(fieldset, fieldsetIndex) in fieldsets" :key="fieldsetIndex">
+          <h2>{{ $t(fieldset.label) }}</h2>
+          <q-card>
+            <q-card-section>
+              <div class="row q-col-gutter-md">
+                <div v-for="(component, componentIndex) in fieldset.components"
+                     :key="componentIndex"
+                     :is="component.component"
+                     :label="`${$t(component.label)} ${component.isMultiLang ? '('+component.props.lang+')' : ''}`"
+                     :readonly="!editing"
+                     :data-multilingual="component.isMultiLang"
+                     :data-lang="component.props ? component.props.lang : ''"
+                     :lang="component.props ? component.props.lang : null"
+                     :entity="entity"
+                     v-show="!component.isMultiLang || (component.isMultiLang && (component.props.lang === contentLang || contentLang === 'all'))"
+                     :value="getValue(component)"
+                     @input="setValue(component, $event)"
+                     v-bind="component.props"
+                     :rules="getRules(component)"
+                     class="col-12" />
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </template>
+      <div class="fixed-top-right text-white action-buttons">
+        <q-btn v-if="!editing && !loading"
+               push size="lg" icon="edit" class="bg-accent no-border-radius"
+               :label="$t('general.edit')"
+               type="a"
+               :disable="saving"
+               @click="editing = true" />
+        <q-btn v-if="editing"
+               type="a"
+               flat size="md" class="no-border-radius q-mr-sm"
+               :label="$t('general.cancel')"
+               @click="cancel" />
+        <q-btn v-if="editing"
+               push size="lg" icon="cloud_upload" class="bg-positive no-border-radius"
+               :disable="loading || saving"
+               :loading="saving"
+               type="submit"
+               :label="$t('general.save')" />
+      </div>
+    </nq-page>
+  </q-form>
 </template>
 
 <script>
@@ -172,7 +190,9 @@ export default {
         this.entity.published_at = moment().format()
         this.entity.unpublished_at = null
         this.editing = true
-        this.loading = false
+        this.$nextTick( () => {
+          this.loading = false
+        })
       }
       this.fieldsets = _.get(this.$store.state, `ui.config.models.${this.entity.model}.form`, [])
     },
@@ -201,6 +221,15 @@ export default {
       } else {
         this.entity[component.value] = value
       }
+    },
+    getRules (component) {
+      let rules = []
+      if (component.rules) {
+        for (let r in component.rules) {
+          rules.push(this.$rules[component.rules[r][0]](component.rules[r][1], component.rules[r][2], component.rules[r][3]))
+        }
+      }
+      return rules
     },
     findContentRow (props) {
       if (!this.entity) return undefined
