@@ -190,7 +190,7 @@ export default {
         this.entity.published_at = moment().format()
         this.entity.unpublished_at = null
         this.editing = true
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           this.loading = false
         })
       }
@@ -223,9 +223,9 @@ export default {
       }
     },
     getRules (component) {
-      let rules = []
+      const rules = []
       if (component.rules) {
-        for (let r in component.rules) {
+        for (const r in component.rules) {
           rules.push(this.$rules[component.rules[r][0]](component.rules[r][1], component.rules[r][2], component.rules[r][3]))
         }
       }
