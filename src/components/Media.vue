@@ -1,5 +1,5 @@
 <template>
-  <div v-show="readonly">
+  <div>
     <div v-if="loading" class="row q-col-gutter-md">
       <q-skeleton type="QBtn" class="col-3 offset-9 q-mt-md" />
       <div class="col-xs-12 col-sm-6 col-md-4" v-for="index in 3" :key="index">
@@ -12,7 +12,8 @@
         </q-card>
       </div>
     </div>
-    <div v-if="!loading">
+    <q-banner class="bg-grey-2 text-center q-mb-md" v-if="!readonly">{{ $t('general.saveBefore')}}</q-banner>
+    <div v-if="!loading && readonly">
       <div class="q-mb-md flex justify-end">
         <q-btn class=""
                outline color="positive"  icon="add_circle"

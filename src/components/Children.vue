@@ -1,12 +1,13 @@
 <template>
-  <div v-show="readonly">
+  <div>
     <div v-if="loading" class="flex column items-end">
         <q-skeleton type="QBtn" class="q-mb-md" />
         <q-skeleton type="QInput" class="q-mb-md full-width" />
         <q-skeleton type="QInput" class="q-mb-md full-width" />
         <q-skeleton type="QInput" class="q-mb-md full-width" />
     </div>
-    <div v-if="!loading">
+    <q-banner class="bg-grey-2 text-center" v-if="!readonly">{{ $t('general.saveBefore')}}</q-banner>
+    <div v-if="!loading && readonly">
       <div class="q-mb-md flex justify-end">
         <q-btn-dropdown class="" outline color="positive"  icon="add_circle"  :label="$t('general.add')" v-if="models && models.length > 1">
           <q-list>

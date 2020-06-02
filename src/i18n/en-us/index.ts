@@ -22,6 +22,7 @@ export default {
     delete: 'Delete',
     add: 'Add',
     saveError: 'There was an error trying to send information',
+    saveBefore: 'Please save before adding items',
     noItems: 'No items yet'
   },
   login: {
