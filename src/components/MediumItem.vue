@@ -10,7 +10,6 @@
            :ratio="1" contain
            v-if="medium.properties && medium.properties.isWebImage && medium.properties.format === 'svg'"
            class="checkered-bg" />
-    {{ medium.properties.isWebImage }} : {{ medium.properties.format }}
     <q-responsive :ratio="1" v-if="!medium.properties || !medium.properties.isWebImage" >
       <div class="rounded-borders bg-grey-2 text-white flex flex-center">
         <q-icon size="80px"
