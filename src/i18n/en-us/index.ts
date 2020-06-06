@@ -47,6 +47,7 @@ export default {
     delete: 'Do you really want to delete this entity?',
     title: 'Title',
     description: 'Description',
+    relations: 'Relations',
     slug: 'Friendly url',
     footer: 'Footer',
     publishedAt: 'Publish at',
@@ -54,7 +55,8 @@ export default {
     children: 'Children',
     media: 'Media',
     reorder: 'Reorder',
-    saveOk: 'Saved'
+    saveOk: 'Saved',
+    unlink: 'Unlink'
   },
   media: {
     title: 'Media',

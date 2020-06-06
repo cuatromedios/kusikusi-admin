@@ -72,6 +72,8 @@ module.exports = configure(function (ctx) {
         'QDate',
         'QDialog',
         'QDrawer',
+        'QFab',
+        'QFabAction',
         'QField',
         'QFile',
         'QForm',

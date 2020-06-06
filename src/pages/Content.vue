@@ -115,11 +115,12 @@ import _ from 'lodash'
 import moment from 'moment'
 import Children from '../components/Children'
 import Media from '../components/Media'
+import Relations from '../components/Relations'
 import HtmlEditor from '../components/HtmlEditor'
 import Slug from '../components/Slug'
 export default {
   name: 'Content',
-  components: { Children, Media, HtmlEditor, Slug },
+  components: { Children, Relations, Media, HtmlEditor, Slug },
   data () {
     return {
       editing: false,

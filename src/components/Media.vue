@@ -113,7 +113,7 @@
           <q-btn
             color="primary"
             icon="cloud_upload"
-            label="Upload"
+            :label="$t('media.upload')"
             @click="upload"
             :disable="!canUpload"
             :loading="uploading"
