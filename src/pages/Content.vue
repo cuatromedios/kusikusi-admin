@@ -5,7 +5,7 @@
         <q-breadcrumbs>
           <q-breadcrumbs-el v-for="ancestor in ancestors"
                             :key="ancestor.id"
-                            :label="ancestor.title"
+                            :label="ancestor.title || (ancestor.properties ? ancestor.properties.title : null) || '-'"
                             :to="{ name: 'content', params: { entity_id: ancestor.id } }"
           />
           <q-breadcrumbs-el />
@@ -88,7 +88,7 @@
         </div>
       </template>
       <div class="fixed-top-right text-white action-buttons">
-        <q-btn v-if="!editing && !loading"
+        <q-btn v-if="!editing && !loading && isEditable"
                push size="lg" icon="edit" class="bg-accent no-border-radius"
                :label="$t('general.edit')"
                type="a"
@@ -133,10 +133,10 @@ export default {
         model: '',
         view: '',
         contents: [],
+        properties: { title: '' },
         entity_relations: [],
         parent_entity_id: '',
         is_active: true,
-        properties: {},
         published_at: null,
         unpublished_at: null,
         version: 0,
@@ -170,7 +170,7 @@ export default {
         this.loading = false
         if (contentResult.success) {
           this.entity = contentResult.data
-          const ancestorsResult = await this.$api.get(`/entities/?ancestor-of=${this.entity.id}&descendant-of=website&select=id,contents.title&order-by=ancestor_relation_depth:desc`)
+          const ancestorsResult = await this.$api.get(`/entities/?ancestor-of=${this.entity.id}&descendant-of=website&select=id,contents.title,properties&order-by=ancestor_relation_depth:desc`)
           if (ancestorsResult.success) {
             this.ancestors = ancestorsResult.data.data
           } else {
@@ -209,6 +209,9 @@ export default {
             text: ''
           })
         }
+      } else if (component.value && component.value.startsWith('properties.')) {
+        const fieldName = component.value.split('.')[1]
+        return this.entity.properties[fieldName]
       } else {
         return this.entity[component.value]
       }
@@ -219,6 +222,9 @@ export default {
         if (foundField) {
           foundField.text = value
         }
+      } else if (component.value && component.value.startsWith('properties.')) {
+        const fieldName = component.value.split('.')[1]
+        this.$set(this.entity.properties, fieldName, value)
       } else {
         this.entity[component.value] = value
       }
@@ -260,6 +266,9 @@ export default {
           message: this.$t('contents.saveOk')
         })
         this.editing = false
+        if (this.isNew) {
+          this.$router.replace({ name: 'content', params: { entity_id: saveResult.data.id } })
+        }
       } else {
         this.$q.notify({
           position: 'top',
@@ -274,10 +283,13 @@ export default {
     getEntityTitle () {
       if (!this.entity) return ''
       const fromContents = this.findContentRow({ lang: this.$store.state.ui.config.langs[0], field: 'title' })
-      return fromContents && fromContents.text !== '' ? fromContents.text : this.$store.getters.nameOf(this.entity.model)
+      return fromContents && fromContents.text !== '' ? fromContents.text : this.entity.properties ? this.entity.properties.title || this.$t(this.$store.getters.nameOf(this.entity.model)) : ''
     },
     isNew () {
       return this.$route.params.entity_id === 'new'
+    },
+    isEditable () {
+      return _.get(this.$store.state, `ui.config.models.${this.entity.model}.editable`, true)
     },
     views () {
       return _.get(this.$store.state, `ui.config.models.${this.entity.model}.views`, [this.entity.model])

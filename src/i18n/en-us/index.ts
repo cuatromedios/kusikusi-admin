@@ -46,6 +46,7 @@ export default {
     active: 'Published',
     delete: 'Do you really want to delete this entity?',
     title: 'Title',
+    name: 'Name',
     description: 'Description',
     relations: 'Relations',
     slug: 'Friendly url',
@@ -86,11 +87,19 @@ export default {
       uploaded: 'Uploaded'
     }
   },
+  menus: {
+    title: 'Menus',
+    items: 'Menu items',
+    menu: 'Menu'
+  },
   models: {
     home: 'Home',
     section: 'Section',
     page: 'Page',
     media: 'Media container',
+    website: 'Web site',
+    menus: 'Menus container',
+    menu: 'Menu',
     medium: 'Medium'
   },
   qr: {

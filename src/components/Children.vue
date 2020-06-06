@@ -90,7 +90,7 @@ export default {
   methods: {
     async getChildren () {
       this.loading = true
-      const childrenResult = await this.$api.get(`/entities?child-of=${this.entity.id}&select=contents.title,published_at,unpublished_at,is_active,model,id,relation_children.relation_id&only-published=false&order-by=${this.order_by}`)
+      const childrenResult = await this.$api.get(`/entities?child-of=${this.entity.id}&select=contents.title,properties,published_at,unpublished_at,is_active,model,id,relation_children.relation_id&only-published=false&order-by=${this.order_by}`)
       this.loading = false
       if (childrenResult.success) {
         this.children = childrenResult.data.data

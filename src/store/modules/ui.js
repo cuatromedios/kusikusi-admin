@@ -25,6 +25,12 @@ const state = {
       name: 'content',
       params: { entity_id: 'home' }
     },
+    menus: {
+      label: 'menus.title',
+      icon: 'list',
+      name: 'content',
+      params: { entity_id: 'menus-container' }
+    },
     website: {
       label: 'contents.website',
       icon: 'web',
@@ -73,7 +79,7 @@ const getters = {
     let menu = _.clone(_.get(state, `config.menu.${rootState.session.user.profile}`))
     if (!menu) {
       if (rootState.session.user.profile === 'admin') {
-        menu = [state.menuItems.content, state.menuItems.website]
+        menu = [state.menuItems.content, state.menuItems.menus, state.menuItems.website]
       } else {
         menu = [state.menuItems.content]
       }
