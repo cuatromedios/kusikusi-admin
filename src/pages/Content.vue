@@ -37,9 +37,7 @@
                 <p>{{ entity.published_at | moment('dddd DD MMMM YYYY, h:mm a') }}
                   <small>(UTC&nbsp;{{ entity.published_at | moment('Z') }})</small></p>
               </nq-field>
-              <nq-field label="ID" class="col-12" readonly stack-label>
-                <p>{{ entity.id }}</p>
-              </nq-field>
+              <nq-input label="ID" class="col-12" :readonly="!isNew" stack-label v-model="entity.id" :rules="[$rules.required(), $rules.minLength(3), $rules.maxLength(16), val => RegExp('^[A-Za-z0-9_-]{3,16}$').test(val)]" />
             </div>
           </q-card-section>
           <q-card-section v-if="loading">
@@ -253,7 +251,7 @@ export default {
       this.saving = true
       let saveResult
       if (this.isNew) {
-        delete this.entity.id
+        if (this.entity.id === 'new') delete this.entity.id
         saveResult = await this.$api.post('/entity', this.entity)
       } else {
         saveResult = await this.$api.patch(`/entity/${this.entity.id}`, this.entity)
