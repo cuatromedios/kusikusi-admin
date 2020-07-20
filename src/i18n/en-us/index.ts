@@ -81,6 +81,7 @@ export default {
     size: 'Size',
     url: 'External URL',
     lang: 'Medium lang',
+    invalidFormat: 'Invalid file format',
     status: {
       title: 'Status',
       idle: 'Idle',

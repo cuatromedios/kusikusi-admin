@@ -64,6 +64,7 @@
             class="full-width media-library-file-picker"
             :class="{ 'with-files': this.uploadProgress.length > 0 }"
             :accept="acceptedFiles"
+            @rejected="rejectedFiles"
           >
             <template v-slot:file>
             </template>
@@ -306,6 +307,18 @@ export default {
     },
     onMediaDialogHide () {
       this.uploadProgress = []
+    },
+    rejectedFiles(files) {
+      let filesNames = ''
+      for (let f in files) {
+        filesNames += (' - ' + files[f].file.name);
+      }
+      this.$q.notify({
+        position: 'top',
+        color: 'negative',
+        message: this.$t('media.invalidFormat'),
+        caption: filesNames
+      })
     }
   },
   computed: {
