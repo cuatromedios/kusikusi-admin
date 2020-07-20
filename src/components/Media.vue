@@ -29,6 +29,7 @@
           <medium-item :medium="medium"
                        :entity_id="entity.id"
                        :tags="tags"
+                       :allowed="allowed"
                        @getMedia="getMedia"
                        :reorderMode="reorderMode"
                        class="full-width full-height"
@@ -66,8 +67,7 @@
             :accept="acceptedFiles"
             @rejected="rejectedFiles"
           >
-            <template v-slot:file>
-            </template>
+            <template v-slot:file></template>
           </q-file>
           <q-list class="rounded-borders media-library-file-list q-mt-md" v-if="uploadProgress.length > 0">
             <q-item v-for="(fileToUpload, index) in uploadProgress" :key="index" class="q-pa-none q-mb-md">
@@ -308,10 +308,10 @@ export default {
     onMediaDialogHide () {
       this.uploadProgress = []
     },
-    rejectedFiles(files) {
+    rejectedFiles (files) {
       let filesNames = ''
-      for (let f in files) {
-        filesNames += (' - ' + files[f].file.name);
+      for (const f in files) {
+        filesNames += (' - ' + files[f].file.name)
       }
       this.$q.notify({
         position: 'top',

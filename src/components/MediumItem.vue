@@ -2,15 +2,15 @@
   <q-card
     class="medium-item"
     :class="{ 'cursor-drag': reorderMode }">
-    <q-img :src="`${$store.getters.media_url}${medium.thumb}`"
+    <q-img :src="`${$store.getters.media_url}${medium.thumb}?${Math.random()}`"
            :ratio="1" contain
-           v-if="medium.properties && medium.properties.isWebImage && medium.properties.format !== 'svg'"
+           v-if="(medium.properties && medium.properties.isWebImage && medium.properties.format !== 'svg') && !uploading"
            class="checkered-bg" />
-    <q-img :src="`${$store.getters.media_url}${medium.original}`"
+    <q-img :src="`${$store.getters.media_url}${medium.original}?${Math.random()}`"
            :ratio="1" contain
-           v-if="medium.properties && medium.properties.isWebImage && medium.properties.format === 'svg'"
+           v-if="(medium.properties && medium.properties.isWebImage && medium.properties.format === 'svg') && !uploading"
            class="checkered-bg" />
-    <q-responsive :ratio="1" v-if="!medium.properties || !medium.properties.isWebImage" >
+    <q-responsive :ratio="1" v-if="(!medium.properties || !medium.properties.isWebImage) || uploading" >
       <div class="rounded-borders bg-grey-2 text-white flex flex-center">
         <q-icon size="80px"
                 color="grey-5"
@@ -18,6 +18,22 @@
                 v-if="!medium.properties || !medium.properties.isWebImage" />
       </div>
     </q-responsive>
+    <q-icon name="cloud_upload"
+            class="absolute-top-left"
+            size="lg"
+            style="left: 16px; top: 16px; opacity: 0.5" />
+    <q-file
+      @input="updateFile"
+      label="" outlined rounded
+      ref="filePicker"
+      class="absolute-top-left"
+      style="width: 4em; height: 4em; left: 8px; top: 8px;"
+      :accept="acceptedFile"
+      :loading="uploading"
+      @rejected="rejectedFile"
+    >
+      <template v-slot:file></template>
+    </q-file>
     <q-btn-dropdown round dropdown-icon="more_vert" flat color="grey-6" class="absolute-top-right">
       <q-list>
         <q-item clickable v-close-popup :to="{ name: 'content', params: { entity_id: medium.id } }" target="_blank">
@@ -66,9 +82,10 @@
 import _ from 'lodash'
 export default {
   name: 'MediaItem',
-  props: ['medium', 'tags', 'reorderMode', 'entity_id'],
+  props: ['medium', 'tags', 'reorderMode', 'entity_id', 'allowed'],
   data () {
     return {
+      uploading: false,
       saving: false,
       editing: false,
       editingTags: [],
@@ -121,6 +138,37 @@ export default {
         await this.$api.delete(`/entity/${this.entity_id}/relation/${this.medium.id}/medium`)
         this.$emit('getMedia')
       })
+    },
+    async updateFile (file) {
+      const data = new FormData()
+      data.append('file', file)
+      this.uploading = true
+      await this.$api.post(`/medium/${this.medium.id}/upload`, data, { 'Content-Type': 'multipart/form-data' })
+      this.uploading = false
+    },
+    rejectedFile (files) {
+      let filesNames = ''
+      for (const f in files) {
+        filesNames += (' - ' + files[f].file.name)
+      }
+      this.$q.notify({
+        position: 'top',
+        color: 'negative',
+        message: this.$t('media.invalidFormat'),
+        caption: filesNames
+      })
+    }
+  },
+  computed: {
+    acceptedFile () {
+      if (!this.allowed || this.allowed[0] === '*' || this.allowed[0] === '' || this.allowed === '' || this.allowed === '*') {
+        return ''
+      }
+      let formatList = []
+      _.each(this.allowed, (f) => {
+        formatList = [...formatList, ..._.get(this.$store.state.ui.config, `formats.${f}`, [f])]
+      })
+      return '.' + formatList.join(', .')
     }
   }
 }

@@ -199,7 +199,7 @@ export default {
     },
     async clearCache () {
       this.clearing = true
-      let result = await this.$api.delete(`/static/web/${this.entity.id !== 'website' ? this.entity.id : ''}`)
+      const result = await this.$api.delete(`/static/web/${this.entity.id !== 'website' ? this.entity.id : ''}`)
       if (result.success) {
         this.$q.notify({
           position: 'top',
