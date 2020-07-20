@@ -2,15 +2,16 @@
   <q-layout view="hHh lpR lFf" class="bg-grey-3">
     <q-header class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense icon="menu" flat @click="left = !left">
-          <img src="~assets/logo.svg" style="width: 2.5em;" >
-        </q-btn>
+        <q-btn dense icon="menu" flat @click="left = !left" class="lt-md" />
+        {{ $store.getters.title() }}
       </q-toolbar>
     </q-header>
     <q-drawer v-model="left"
               side="left"
               bordered
+              show-if-above
               :mini="miniState"
+              class="kk-drawer"
               @mouseover="miniState = false"
               @mouseout="miniState = true">
       <q-list class="rounded-borders text-info q-mt-lg">
@@ -40,12 +41,17 @@ export default {
   name: 'InternalLayout',
   data () {
     return {
-      left: false,
+      left: true,
       miniState: true
     }
   }
 }
 </script>
 
-<style lang="stylus">
+<style lang="scss">
+  .kk-drawer {
+    .q-drawer {
+      position: fixed;
+    }
+  }
 </style>

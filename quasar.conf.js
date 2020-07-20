@@ -92,6 +92,7 @@ module.exports = configure(function (ctx) {
         'QPopupProxy',
         'QRadio',
         'QResponsive',
+        'QScrollArea',
         'QSelect',
         'QSeparator',
         'QSkeleton',

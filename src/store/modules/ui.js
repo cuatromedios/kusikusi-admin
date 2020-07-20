@@ -92,6 +92,9 @@ const getters = {
   },
   nameOf: (state) => (model) => {
     return _.get(state, `config.models[${model}].name`, model)
+  },
+  title: (state) => () => {
+    return _.get(state, `config.title`, 'Kusikusi CMS')
   }
 }
 

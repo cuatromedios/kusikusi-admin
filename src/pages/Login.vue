@@ -2,6 +2,7 @@
   <nq-page max-width="sm" class="flex flex-center">
     <nq-form cancel-label="" :submit-label="$t('login.button')" @submit="handleLogin">
       <q-img src="~assets/logo.svg" alt="Retryver" height="72px" class="q-my-md" contain />
+      <p class="text-h3 text-center col-12">{{ $store.getters.title() }}</p>
       <nq-input :autofocus="true"
                 class="col-12"
                 v-model="form.email"
