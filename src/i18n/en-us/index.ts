@@ -57,7 +57,9 @@ export default {
     media: 'Media',
     reorder: 'Reorder',
     saveOk: 'Saved',
-    unlink: 'Unlink'
+    unlink: 'Unlink',
+    clearCache: 'Clear cache',
+    cacheCleared: 'Cache cleared'
   },
   media: {
     title: 'Media',

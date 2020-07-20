@@ -38,6 +38,7 @@
                   <small>(UTC&nbsp;{{ entity.published_at | moment('Z') }})</small></p>
               </nq-field>
               <nq-input label="ID" class="col-12" :readonly="!isNew" stack-label v-model="entity.id" :rules="[$rules.required(), $rules.minLength(3), $rules.maxLength(16), val => RegExp('^[A-Za-z0-9_-]{3,16}$').test(val)]" />
+              <q-btn class="col-8 offset-2" flat size="sm" @click="clearCache" :loading="clearing">{{ $t('contents.clearCache') }}</q-btn>
             </div>
           </q-card-section>
           <q-card-section v-if="loading">
@@ -126,6 +127,7 @@ export default {
       saving: false,
       fieldsets: [],
       ancestors: [],
+      clearing: false,
       entity: {
         id: '',
         model: '',
@@ -194,6 +196,24 @@ export default {
         })
       }
       this.fieldsets = _.get(this.$store.state, `ui.config.models.${this.entity.model}.form`, [])
+    },
+    async clearCache () {
+      this.clearing = true
+      let result = await this.$api.delete(`/static/web/${this.entity.id !== 'website' ? this.entity.id : ''}`)
+      if (result.success) {
+        this.$q.notify({
+          position: 'top',
+          color: 'positive',
+          message: this.$t('contents.cacheCleared')
+        })
+      } else {
+        this.$q.notify({
+          position: 'top',
+          color: 'negative',
+          message: this.$t('general.serverError')
+        })
+      }
+      this.clearing = false
     },
     getValue (component) {
       if (component.isMultiLang) {
