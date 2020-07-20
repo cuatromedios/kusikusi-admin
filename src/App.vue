@@ -4,6 +4,7 @@
       <q-spinner size="xl" />
     </div>
     <router-view v-if="prepared" />
+    <div id="version">v 4.3.1</div>
   </div>
 </template>
 
@@ -40,3 +41,12 @@ export default {
   }
 }
 </script>
+
+<style>
+  #version {
+    position: fixed;
+    right: 0.5em;
+    bottom: 0.5em;
+    opacity: 0.25;
+  }
+</style>
