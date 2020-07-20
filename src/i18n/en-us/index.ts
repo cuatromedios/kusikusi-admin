@@ -67,7 +67,7 @@ export default {
     library: 'Library',
     select: 'Select or drop files...',
     replace: 'Replace file',
-    unlink: 'Unlink this media',
+    unlink: 'Remove this media',
     edit: 'Edit in new window',
     unlinkConfirm: 'Are you sure you want to unlink the media from this entity?',
     tags: 'Tags',
