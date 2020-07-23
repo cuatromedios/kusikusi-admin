@@ -170,7 +170,7 @@ export default {
         this.loading = false
         if (contentResult.success) {
           this.entity = contentResult.data
-          const ancestorsResult = await this.$api.get(`/entities/?ancestor-of=${this.entity.id}&descendant-of=website&select=id,contents.title,properties&order-by=ancestor_relation_depth:desc`)
+          const ancestorsResult = await this.$api.get(`/entities?ancestor-of=${this.entity.id}&descendant-of=website&select=id,contents.title,properties&order-by=ancestor_relation_depth:desc`)
           if (ancestorsResult.success) {
             this.ancestors = ancestorsResult.data.data
           } else {
@@ -199,7 +199,7 @@ export default {
     },
     async clearCache () {
       this.clearing = true
-      const result = await this.$api.delete(`/static/web/${this.entity.id !== 'website' ? this.entity.id : ''}`)
+      const result = await this.$api.delete(`/static/web${this.entity.id !== 'website' ? `/${this.entity.id}` : ''}`)
       if (result.success) {
         this.$q.notify({
           position: 'top',
