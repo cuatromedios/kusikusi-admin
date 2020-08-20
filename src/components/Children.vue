@@ -58,6 +58,7 @@
 import draggable from 'vuedraggable'
 import _ from 'lodash'
 import ChildItem from './ChildItem'
+import moment from "moment";
 export default {
   components: { ChildItem, draggable },
   name: 'Children',

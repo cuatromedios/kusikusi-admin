@@ -28,13 +28,15 @@
         <q-card>
           <q-card-section v-if="!loading">
             <div class="row q-col-gutter-sm">
-              <nq-field dense class="col-12" :readonly="!editing">
-                <q-checkbox v-model="entity.is_active" :label="$t('contents.active')" :disable="!editing" left-label color="dark" />
+              <nq-field dense class="col-12" :readonly="!editing" v-if="editing" >
+                <q-checkbox v-model="entity.is_active" :label="$t('contents.active')" left-label color="dark" />
               </nq-field>
+              <div class="text-center col-12 text-positive" v-if="!editing && entity.is_active">{{ $t('contents.active') }}</div>
+              <q-badge class="text-center col-12 text-warning" v-if="!editing && !entity.is_active">{{ $t('contents.notActive') }}</q-badge>
               <nq-select dense v-model="entity.view" :label="$t('contents.view')" class="col-12" :readonly="!editing" :options="views"/>
               <nq-date-time dense v-model="entity.published_at" display-format="dddd DD MMMM YYYY, h:mm a" :label="$t('contents.publishedAt')" class="col-12" :readonly="!editing" v-if="editing"></nq-date-time>
               <nq-field :label="$t('contents.publishedAt')" class="col-12" readonly stack-label v-if="!editing">
-                <p>{{ entity.published_at | moment('dddd DD MMMM YYYY, h:mm a') }}
+                <p :class=" { 'text-warning': !isBefore(entity.published_at) } ">{{ entity.published_at | moment('dddd DD MMMM YYYY, h:mm a') }} {{ isBefore(entity.published_at) ? "S" : "N" }}
                   <small>(UTC&nbsp;{{ entity.published_at | moment('Z') }})</small></p>
               </nq-field>
               <nq-input label="ID" class="col-12" :readonly="!isNew" stack-label v-model="entity.id" :rules="[$rules.required(), $rules.minLength(3), $rules.maxLength(16), val => RegExp('^[A-Za-z0-9_-]{3,16}$').test(val)]" />
@@ -295,6 +297,10 @@ export default {
           caption: `${saveResult.data.message} (${saveResult.status})`
         })
       }
+    },
+    isBefore (date1, date2) {
+      if (!date2) date2 = moment()
+      return moment(date1).isBefore(date2)
     }
   },
   computed: {

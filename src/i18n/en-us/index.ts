@@ -44,6 +44,7 @@ export default {
     contents: 'Contents',
     publication: 'Publication',
     active: 'Published',
+    notActive: 'Not published',
     delete: 'Do you really want to delete this entity?',
     title: 'Title',
     name: 'Name',
