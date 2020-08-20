@@ -18,15 +18,15 @@
       <q-item-label caption lines="1">{{ $t($store.getters.nameOf(child.model)) }} | <span :class=" { 'text-warning': !isBefore(child.published_at) } ">{{ child.published_at | moment('dddd DD MMMM YYYY, h:mm a') }}</span></q-item-label>
     </q-item-section>
     <q-item-section side v-if="tags && tags.length > 0">
-      <div class="row items-center">
+      <div class="row items-center tag-select">
         <q-select v-model="editingTags"
                   @input="onInput"
                   :options="tags"
                   multiple use-chips
                   ref="tagSelector"
-                  dense options-dense borderless hide-dropdown-icon>
-          <template v-slot:prepend>
-            <q-icon name="local_offer" size="xs" color="info" />
+                  dense options-dense borderless>
+          <template v-slot:append>
+            <q-icon name="local_offer" size="xs" color="info" /> <small>{{ $t('contents.addTag') }}</small>
           </template>
         </q-select>
         <q-btn dense outline rounded icon="check" size="sm" color="positive" v-if="editing" :loading="saving" @click="acceptTags">{{ $t('general.confirm') }}&nbsp;&nbsp;</q-btn>

@@ -60,7 +60,8 @@ export default {
     saveOk: 'Saved',
     unlink: 'Unlink',
     clearCache: 'Clear cache',
-    cacheCleared: 'Cache cleared'
+    cacheCleared: 'Cache cleared',
+    addTag: 'Add tag'
   },
   media: {
     title: 'Media',

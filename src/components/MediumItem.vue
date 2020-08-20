@@ -67,9 +67,10 @@
                   :options="tags"
                   multiple use-chips
                   ref="tagSelector"
-                  dense borderless hide-dropdown-icon>
-          <template v-slot:prepend>
-            <q-icon name="local_offer" size="xs" color="info" />
+                  class="tag-select"
+                  dense borderless>
+          <template v-slot:append>
+            <q-icon name="local_offer" size="xs" color="info" /><small>{{ $t('contents.addTag') }}</small>
           </template>
         </q-select>
         <q-btn dense outline rounded icon="check" size="sm" color="positive" v-if="editing" :loading="saving" @click="acceptTags">{{ $t('general.confirm') }}&nbsp;&nbsp;</q-btn>
