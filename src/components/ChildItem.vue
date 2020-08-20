@@ -37,7 +37,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import moment from "moment";
+import moment from 'moment'
 export default {
   name: 'ChildItem',
   props: ['child', 'tags', 'reorderMode', 'entity_id'],

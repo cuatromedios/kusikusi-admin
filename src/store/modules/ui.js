@@ -94,7 +94,7 @@ const getters = {
     return _.get(state, `config.models[${model}].name`, model)
   },
   title: (state) => () => {
-    return _.get(state, `config.title`, 'Kusikusi CMS')
+    return _.get(state, 'config.title', 'Kusikusi CMS')
   }
 }
 
