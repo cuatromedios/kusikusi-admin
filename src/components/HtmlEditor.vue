@@ -3,6 +3,7 @@
     <div class="full-width">
       <editor-menu-bar :editor="editor"
                        v-slot="{ commands, isActive, getMarkAttrs }"
+                       v-if="!editingSource"
                        style="position: sticky; top: 64px; z-index: 100">
         <div class="editor-menu-bar" v-show="!readonly">
           <q-btn-group v-for="(group, groupIndex) in toolbar"
@@ -18,8 +19,12 @@
           </q-btn-group>
         </div>
       </editor-menu-bar>
-      <div class="editor-content-container">
-        <editor-content class="editor-content" :editor="editor" />
+        <div class="editor-content-container" v-if="!editingSource || readonly">
+          <editor-content class="editor-content" :editor="editor" />
+        </div>
+      <div v-if="!readonly">
+        <q-input type="textarea" v-model="sourceCode" class="full-width q-mt-sm" v-if="editingSource"></q-input>
+        <q-btn :flat="!editingSource" :outline="editingSource" size="sm" class="q-my-xs" @click="editingSource = !editingSource" :icon="editingSource ? 'close' : ''">Edit source</q-btn>
       </div>
     </div>
   </nq-field>
@@ -110,7 +115,8 @@ export default {
   },
   data () {
     return {
-      editor: null
+      editor: null,
+      editingSource: false
     }
   },
   methods: {
@@ -136,6 +142,17 @@ export default {
     },
     contentUpdated (html) {
       this.$emit('input', html)
+    }
+  },
+  computed: {
+    sourceCode: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.editor.setContent(val)
+        this.$emit('input', val)
+      }
     }
   },
   watch: {
