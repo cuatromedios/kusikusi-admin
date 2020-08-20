@@ -21,11 +21,13 @@
     <q-icon name="cloud_upload"
             class="absolute-top-left"
             size="lg"
+            v-show="false"
             style="left: 16px; top: 16px; opacity: 0.5" />
     <q-file
       @input="updateFile"
       label="" outlined rounded
       ref="filePicker"
+      v-show="false"
       class="absolute-top-left"
       style="width: 4em; height: 4em; left: 8px; top: 8px;"
       :accept="acceptedFile"
@@ -50,6 +52,14 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>{{ $t('media.unlink') }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable v-close-popup @click="$refs.filePicker.pickFiles()">
+          <q-item-section avatar>
+            <q-icon name="cloud_upload" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('media.replace') }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
