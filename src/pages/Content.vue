@@ -32,7 +32,7 @@
                 <q-checkbox v-model="entity.is_active" :label="$t('contents.active')" left-label color="dark" />
               </nq-field>
               <div class="text-center col-12 text-positive" v-if="!editing && entity.is_active">{{ $t('contents.active') }}</div>
-              <q-badge class="text-center col-12 text-warning" v-if="!editing && !entity.is_active">{{ $t('contents.notActive') }}</q-badge>
+              <div class="text-center col-12 text-warning" v-if="!editing && !entity.is_active">{{ $t('contents.notActive') }}</div>
               <nq-select dense v-model="entity.view" :label="$t('contents.view')" class="col-12" :readonly="!editing" :options="views"/>
               <nq-date-time dense v-model="entity.published_at" display-format="dddd DD MMMM YYYY, h:mm a" :label="$t('contents.publishedAt')" class="col-12" :readonly="!editing" v-if="editing"></nq-date-time>
               <nq-field :label="$t('contents.publishedAt')" class="col-12" readonly stack-label v-if="!editing">
@@ -50,6 +50,9 @@
             <q-skeleton type="QSlider" class="q-mb-md" />
           </q-card-section>
         </q-card>
+        <div class="flex flex-center q-mt-md">
+          <q-btn size="xs" color="negative" flat @click="onDelete">{{ $t('general.delete')}}</q-btn>
+        </div>
       </template>
       <template v-if="loading">
         <h2>&nbsp;</h2>
@@ -297,6 +300,24 @@ export default {
           caption: `${saveResult.data.message} (${saveResult.status})`
         })
       }
+    },
+    onDelete () {
+      this.$q.dialog({
+        title: this.$t('general.delete'),
+        ok: {
+          label: this.$t('general.delete'),
+          color: 'negative'
+        },
+        cancel: {
+          label: this.$t('general.cancel'),
+          color: 'grey',
+          flat: true
+        },
+        message: this.$t('general.sure')
+      }).onOk(async () => {
+        await this.$api.delete(`/entity/${this.entity.id}`)
+        this.$router.back()
+      })
     },
     isBefore (date1, date2) {
       if (!date2) date2 = moment()
