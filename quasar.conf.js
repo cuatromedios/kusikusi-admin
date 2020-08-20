@@ -89,6 +89,7 @@ module.exports = configure(function (ctx) {
         'QList',
         'QLinearProgress',
         'QPageContainer',
+        'QPagination',
         'QPopupProxy',
         'QRadio',
         'QResponsive',

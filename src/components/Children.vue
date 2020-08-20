@@ -39,6 +39,15 @@
           />
         </draggable>
       </q-list>
+      <div class="flex flex-center q-my-md" v-if="this.lastPage > 1">
+        <q-pagination
+          v-model="currentPage"
+          :max="lastPage"
+          :boundary-links="true"
+          :disabled="this.loading"
+          @input="changePage"
+        />
+      </div>
       <q-btn v-if="canReorder && !reorderMode" flat icon="swap_vert" :label="$t('contents.reorder')" class="q-mt-sm" @click="startReorder" />
       <q-btn v-if="reorderMode" :loading="reordering" :disable="reordering" flat icon="done" :label="$t('general.confirm')" class="q-mt-sm" color="positive" @click="reorder" />
       <q-btn v-if="reorderMode" flat :label="$t('general.cancel')" class="q-mt-sm" color="grey" @click="cancelReorder" />
@@ -70,7 +79,7 @@ export default {
       type: Array,
       default: () => []
     },
-    order_by: {
+    orderBy: {
       type: String,
       default: 'relation_children.position'
     }
@@ -81,19 +90,35 @@ export default {
       children: [],
       storedChildren: [],
       reorderMode: false,
-      reordering: false
+      reordering: false,
+      currentPage: 1,
+      perPage: 1,
+      lastPage: 1,
+      total: 1,
+      to: 1,
+      from: 1
     }
   },
   mounted () {
     this.getChildren()
   },
   methods: {
+    changePage (value) {
+      this.currentPage = value
+      this.getChildren()
+    },
     async getChildren () {
       this.loading = true
-      const childrenResult = await this.$api.get(`/entities?child-of=${this.entity.id}&select=contents.title,properties,published_at,unpublished_at,is_active,model,id,relation_children.relation_id&only-published=false&order-by=${this.order_by}`)
+      const childrenResult = await this.$api.get(`/entities?child-of=${this.entity.id}&select=contents.title,properties,published_at,unpublished_at,is_active,model,id,relation_children.relation_id&only-published=false&order-by=${this.orderBy}&page=${this.currentPage}`)
       this.loading = false
       if (childrenResult.success) {
         this.children = childrenResult.data.data
+        this.currentPage = childrenResult.data.current_page
+        this.perPage = childrenResult.data.per_page
+        this.lastPage = childrenResult.data.last_page
+        this.total = childrenResult.data.total
+        this.to = childrenResult.data.to
+        this.from = childrenResult.data.from
       } else {
         this.$q.notify({
           position: 'top',
@@ -134,7 +159,7 @@ export default {
   },
   computed: {
     canReorder () {
-      return this.order_by === 'relation_children.position'
+      return this.orderBy === 'relation_children.position'
     }
   }
 }
