@@ -43,7 +43,7 @@ export default {
       content: this.value,
       editable: !this.readonly,
       extensions: [
-        new Heading({ levels: [1, 2, 3] }),
+        new Heading({ levels: [1, 2, 3, 4, 5, 6] }),
         new Bold(),
         new Italic(),
         new Strike(),
@@ -82,6 +82,9 @@ export default {
           { command: 'heading', label: 'H1', params: { level: 1 } },
           { command: 'heading', label: 'H2', params: { level: 2 } },
           { command: 'heading', label: 'H3', params: { level: 3 } },
+          { command: 'heading', label: 'H4', params: { level: 4 } },
+          { command: 'heading', label: 'H5', params: { level: 5 } },
+          { command: 'heading', label: 'H6', params: { level: 6 } },
           { command: 'code_block', icon: 'code' }
         ],
         [
