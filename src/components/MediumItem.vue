@@ -65,13 +65,13 @@
       </q-list>
     </q-btn-dropdown>
     <q-separator/>
-    <q-card-actions side v-if="tags && tags.length > 0" class="row">
+    <q-card-actions side class="row">
       <h3 class="col-12" style="word-break: break-all">
         <q-icon :name="!medium.properties ? 'blur_on' : medium.properties.isImage ? 'image' : medium.properties.isVideo ? 'movie' : medium.properties.isAudio ? 'graphic_eq' : medium.properties.isDocument ? 'description' : 'insert_drive_file'" class="q-mr-xs" />
         {{ medium.title || $t($store.getters.nameOf(medium.model))}}
         <span v-if="medium.properties" class="text-grey-8">({{ medium.properties.format }})</span>
       </h3>
-      <div class="row items-center col-12">
+      <div v-if="tags && tags.length > 0" class="row items-center col-12">
         <q-select v-model="editingTags"
                   @input="onInput"
                   :options="tags"
