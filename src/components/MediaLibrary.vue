@@ -11,17 +11,32 @@
         </q-card>
       </div>
     </div>
-    <div v-if="!loading" class="row q-col-gutter-md">
-      <div v-for="medium in media" :key="medium.id"
-      class="col-xs-12 col-sm-6 col-md-4">
-        <medium-item :medium="medium"
-                     :entity_id="[]"
-                     :tags="[]"
-                     :allowed="[]"
-                     :reorderMode="[]"
-                     @getMedia="getMedia"
-                     class="full-width full-height" />
+    <div v-if="!loading">
+      <div class="q-mb-md flex justify-end">
+        <q-btn-dropdown class="" outline color="positive"  icon="filter_alt"  :label="'Filtrar'">
+          <q-list>
+            <q-item clickable v-close-popup
+                    v-for="filter in filters"
+                    :key="filter">
+              <q-item-section>
+                <q-item-label>{{ filter.label }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </div>
+      <draggable class="row draggable-container q-col-gutter-md">
+        <div v-for="medium in media" :key="medium.id"
+        class="col-xs-12 col-sm-6 col-md-4">
+          <medium-item :medium="medium"
+                      :entity_id="[]"
+                      :tags="[]"
+                      :allowed="[]"
+                      :reorderMode="[]"
+                      @getMedia="getMedia"
+                      class="full-width full-height" />
+        </div>
+      </draggable>  
     </div>
   </div>
 </template>
@@ -34,7 +49,21 @@ export default {
   data () {
     return {
       loading: true,
-      media: []
+      media: [],
+      filters:{
+        one:{
+          label: 'All'
+        },
+        two:{
+          label: 'Two'
+        },
+        three:{
+          label: 'Three'
+        },
+        four:{
+          label: 'Four'
+        }
+      }
     }
   },
   mounted () {
@@ -56,6 +85,8 @@ export default {
         })
       }
     },
+    addFilter(filter){
+    }
   },
   computed: {
   
