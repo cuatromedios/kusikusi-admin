@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import MediaLibrary from '../components/MediaLibrary'
 export default {
   name: 'Media',

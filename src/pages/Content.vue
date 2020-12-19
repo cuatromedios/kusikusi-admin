@@ -120,11 +120,12 @@ import moment from 'moment'
 import Children from '../components/Children'
 import Media from '../components/Media'
 import Relations from '../components/Relations'
+import RelationsReceived from '../components/RelationsReceived'
 import HtmlEditor from '../components/HtmlEditor'
 import Slug from '../components/Slug'
 export default {
   name: 'Content',
-  components: { Children, Relations, Media, HtmlEditor, Slug },
+  components: { Children, Relations, RelationsReceived, Media, HtmlEditor, Slug },
   data () {
     return {
       editing: false,
