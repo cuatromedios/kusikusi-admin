@@ -21,6 +21,11 @@ const routes: RouteConfig[] = [
         path: '/content/:entity_id?/:model?/:conector?/:parent_entity_id?',
         component: () => import('pages/Content.vue'),
         name: 'content'
+      },
+      {
+        path: '/media',
+        component: () => import('pages/Media.vue'),
+        name: 'media'
       }
     ]
   }
